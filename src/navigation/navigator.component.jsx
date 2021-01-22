@@ -12,9 +12,7 @@ const stackNavigatorOptions = {
   headerShown: true,
   headerTitle: "JitHub",
   headerLeft: () => <Icon style={styles.icon} name="git" color="#fff" />,
-  headerRight: () => (
-    <Text style={styles.repoName}>React Native Community</Text>
-  ),
+  headerRight: () => <Text style={styles.rightHeader}>dev</Text>,
   headerStyle: {
     backgroundColor: "#24292e",
   },
@@ -39,7 +37,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 30,
   },
-  repoName: {
+  rightHeader: {
     fontFamily: "RobotoBold",
     fontSize: 12,
     color: "#fff",
