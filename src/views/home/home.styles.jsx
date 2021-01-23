@@ -47,32 +47,6 @@ export const styles = StyleSheet.create({
   },
   scrollView: {
     marginRight: 0,
-    marginTop: 30,
-  },
-  repoCard: {
-    flex: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    marginBottom: 12,
-    height: 140,
-    maxHeight: 140,
-    width: "100%",
-    borderRadius: 10,
-    backgroundColor: "#FFF",
-  },
-  repoName: {
-    flex: 1,
-    flexWrap: "wrap",
-    marginTop: 5,
-    color: "#0366d6",
-    fontSize: 20,
-    fontFamily: "RobotoBold",
-  },
-  repoDescription: {
-    flex: 2,
-    marginTop: 5,
-    fontSize: 14,
-    color: "#808080",
-    fontFamily: "RobotoRegular",
+    marginTop: 0,
   },
 });

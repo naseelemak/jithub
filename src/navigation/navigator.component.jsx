@@ -1,6 +1,6 @@
 import React from "react";
 import { styles } from "./navigator.styles";
-import { Text } from "react-native";
+import { View, Text } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 
@@ -11,21 +11,32 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 const stackNavigatorOptions = {
   headerShown: true,
-  headerTitle: "JitHub",
-  headerLeft: () => <Icon style={styles.icon} name="git" color="#fff" />,
-  headerRight: () => <Text style={styles.rightHeader}>dev</Text>,
+  // headerTitle: "JitHub",
+  // headerLeft: () => <Icon style={styles.icon} name="git" color="#fff" />,
+  // headerRight: () => <Text style={styles.rightHeader}>dev</Text>,
   headerStyle: {
     backgroundColor: "#24292e",
   },
+  headerTintColor: "#fff",
+  headerTitleAlign: "center",
   headerTitleStyle: {
-    color: "#fff",
-    marginLeft: -20,
+    // marginLeft: -20,
   },
 };
 
 const views = {
-  Home: { screen: Home },
-  RepoDetails: { screen: RepoDetails },
+  Home: {
+    screen: Home,
+    navigationOptions: {
+      title: "JitHub",
+    },
+  },
+  RepoDetails: {
+    screen: RepoDetails,
+    navigationOptions: {
+      title: "Details",
+    },
+  },
 };
 
 const AppNavigator = createStackNavigator(views, {
