@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { styles } from "./navigator.styles";
+import { Text } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 
@@ -22,27 +23,13 @@ const stackNavigatorOptions = {
   },
 };
 
-const AppNavigator = createStackNavigator(
-  {
-    Home: { screen: Home },
-    Detail: { screen: RepoDetails },
-  },
-  {
-    defaultNavigationOptions: stackNavigatorOptions,
-  }
-);
+const views = {
+  Home: { screen: Home },
+  RepoDetails: { screen: RepoDetails },
+};
 
-const styles = StyleSheet.create({
-  icon: {
-    paddingLeft: 10,
-    fontSize: 30,
-  },
-  rightHeader: {
-    fontFamily: "RobotoBold",
-    fontSize: 12,
-    color: "#fff",
-    paddingRight: 10,
-  },
+const AppNavigator = createStackNavigator(views, {
+  defaultNavigationOptions: stackNavigatorOptions,
 });
 
 export default createAppContainer(AppNavigator);
