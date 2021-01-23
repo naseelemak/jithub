@@ -1,28 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { styles } from "./home.styles";
 import { View, Text, Animated, TextInput, Button } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useAxiosGet } from "../../hooks/http-request";
 import Icon from "@expo/vector-icons/FontAwesome";
 
 // other component imports //
-import Loader from "../../components/loader/loader.component";
-import RepoCard from "../../components/repo-card/repo-card.component";
+import RepoList from "../../components/repo-list/repo-list.component";
 
 // TODO:
 // 1. Make a better header
 // 2. Add back to top button
 
 export default function Home({ navigation }) {
-  const url = `https://api.github.com/users/react-native-community/repos`;
+  const [repoData, setRepoData] = useState([]);
+  const [page, setPage] = useState(1);
+
+  const url = `https://api.github.com/users/react-native-community/repos?per_page=${3}&page=${page}`;
 
   let repos = useAxiosGet(url);
-
+  let newRepos = repos.data;
   let content = null;
-
-  const handlePress = () => {
-    navigation.navigate("RepoDetails");
-  };
 
   // display error message if data retrieval fails
   // - Find out if you can add pull down to refresh functionality
@@ -34,52 +31,34 @@ export default function Home({ navigation }) {
     );
   }
 
-  // display loading icon when data form API is still being retrieved
-  if (repos.loading) {
-    content = <Loader />;
-    // content = null;
-  }
-
-  console.log(repos.data);
-  // display data if it exists
-  if (repos.data) {
-    content = repos.data.map((repo) => <RepoCard key={repo.id} {...repo} />);
-  }
+  useEffect(() => {
+    setRepoData((prevRepoData) => {
+      return prevRepoData.concat(newRepos);
+    });
+  }, [newRepos]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Hello World</Text>
-      </View>
-
+      {/* Repo search bar */}
       <View style={styles.body}>
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.topContainer}>
-            <Text style={styles.gitUsername}>React Native Community</Text>
-            <View style={styles.searchBar}>
-              <Icon style={styles.searchIcon} name="search" />
-              <TextInput
-                placeholder="Enter repository keywords"
-                style={styles.textInput}
-              />
-            </View>
-          </View>
-
-          <View style={styles.repoList}>
-            <Button title="Repo Details" onPress={handlePress} />
-
-            <RepoCard
-              name="react-native-template-typescript"
-              description="👾 Clean and minimalist React Native template for a quick start with
-        TypeScript."
+        <View style={styles.topContainer}>
+          <Text style={styles.gitUsername}>React Native Community</Text>
+          <View style={styles.searchBar}>
+            <Icon style={styles.searchIcon} name="search" />
+            <TextInput
+              placeholder="Enter repository keywords"
+              style={styles.textInput}
             />
-
-            {content}
           </View>
-        </ScrollView>
+        </View>
+
+        {/* Repo search results */}
+        <RepoList
+          repoData={repoData}
+          isLoading={repos.loading}
+          setPage={setPage}
+          navigation={navigation}
+        />
       </View>
     </View>
   );

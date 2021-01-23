@@ -5,13 +5,13 @@ export function useAxiosGet(url) {
   // create product state variable
   const [request, setRequest] = useState({
     loading: false,
-    data: null,
+    data: [],
     error: false,
   });
 
   // loads data from the API and throws an error message if it fails
   useEffect(() => {
-    setRequest({ loading: true, data: null, error: false });
+    setRequest({ loading: true, data: [], error: false });
     Axios.get(url)
       .then((response) => {
         setRequest({
@@ -23,7 +23,7 @@ export function useAxiosGet(url) {
       .catch(() => {
         setRequest({
           loading: false,
-          data: null,
+          data: [],
           error: true,
         });
       });

@@ -1,10 +1,21 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { styles } from "./repo-card.styles";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const RepoCard = ({ name, description }) => {
+// TO DO: figure out how to load specific repo detail page
+const handlePress = (navigation) => {
+  navigation.navigate("RepoDetails");
+};
+
+const RepoCard = ({ name, description, navigation }) => {
   return (
-    <View style={styles.repoCard}>
+    <TouchableOpacity
+      style={styles.repoCard}
+      onPress={() => {
+        handlePress(navigation);
+      }}
+    >
       <Text style={styles.repoName} numberOfLines={1} ellipsizeMode="tail">
         {name}
       </Text>
@@ -15,7 +26,7 @@ const RepoCard = ({ name, description }) => {
       >
         {description}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
