@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import styles from "./repo-details.styles";
 import { Octicons } from "@expo/vector-icons";
@@ -34,51 +34,27 @@ export default function RepoDetails({ navigation }) {
     },
   ]);
   const [languages, setLanguages] = useState([]);
+  const languageTotalUnits = useRef(0);
 
   const gitUser = navigation.getParam("gitUser");
   const repoName = navigation.getParam("repoName");
 
   const url = `https://api.github.com/repos/${gitUser}/${repoName}`;
 
+  // Get REPO data using the URL from the repo API request
+  // ====================================================
   const repo = useAxiosGet(url);
   const repoDetails = repo.data;
+  // ====================================================
 
-  // Get repo language data using the URL from the repo API request
+  // Get repo LANGUAGE data using the URL from the repo API request
+  // ====================================================
   const repoLanguagesUrl = repoDetails.languages_url;
   const repoLanguages = useAxiosGet(repoLanguagesUrl);
-  const repoLanguageDetails = repoLanguages.data;
-
-  let content = null;
-
-  // set error message if data retrieval fails
-  // - Find out if you can add pull down to refresh functionality
-  if (repo.error) {
-    content = (
-      <Text
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: 30,
-          paddingHorizontal: 30,
-        }}
-      >
-        There was an error.
-        {"\n"}
-        {"\n"}Please relaunch app or try again later.
-      </Text>
-    );
-  }
-
-  if (repo.loading) {
-    content = (
-      <View style={styles.loader}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
+  const repoLanguageData = repoLanguages.data;
 
   // SETS THE STATS
+  // ===================================================
   useEffect(() => {
     const { stargazers_count, forks_count, subscribers_count } = repoDetails;
 
@@ -106,26 +82,69 @@ export default function RepoDetails({ navigation }) {
       },
     ]);
   }, [repoDetails]);
+  // ===================================================
 
   // SETS THE LANGUAGES
-  // calculate total units of each language and then calculate percentage
-  // useEffect(() => {
-  //   let total = 0;
+  // ===================================================
+  // calculates total units of each language and then calculates the percentages
+  // - Do more research on the reduce() function
+  useEffect(() => {
+    const repoLanguageDetails = Object.entries(repoLanguageData).map(
+      ([language, units]) => {
+        languageTotalUnits.current += units;
+        return { name: language, units: units };
+      }
+    );
 
-  //   setLanguages(() => {
-  //     repoLanguageDetails.map(([language, units], index) => {
-  //       total += units;
+    const newLanguages = repoLanguageDetails.map(({ name, units }, index) => {
+      let percentage = units / languageTotalUnits.current;
+      percentage = Math.round(percentage * 1000) / 10;
 
-  //       return {
-  //         id: index,
-  //         name: "Java",
-  //         percentage: "38.7%",
-  //       };
-  //     });
-  //   });
-  // }, [repoLanguageDetails]);
+      return {
+        id: index,
+        name: name,
+        percentage: percentage + "%",
+      };
+    });
 
-  return repo.error || repo.loading ? (
+    setLanguages(newLanguages);
+  }, [repoLanguageData]);
+  // ===================================================
+
+  let content = null;
+
+  // set error message if data retrieval fails
+  // - Find out if you can add pull down to refresh functionality
+  if (repo.error || repoLanguages.error) {
+    content = (
+      <Text
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 30,
+          paddingHorizontal: 30,
+        }}
+      >
+        There was an error.
+        {"\n"}
+        {"\n"}Please relaunch app or try again later.
+      </Text>
+    );
+  }
+
+  if (repo.loading || repoLanguages.loading) {
+    content = (
+      <View style={styles.loader}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  return repo.error ||
+    repo.loading ||
+    repoLanguages.error ||
+    repoLanguages.loading ? (
     content
   ) : (
     <View style={styles.repoDetails}>
@@ -138,16 +157,12 @@ export default function RepoDetails({ navigation }) {
               style={styles.userName}
               onPress={() => navigation.navigate("Home")}
             >
-              react-native-community
+              {gitUser}
             </Text>
             <Text>{" / "}</Text>
-            <Text style={styles.repoName}>
-              react-native-template-typescript
-            </Text>
+            <Text style={styles.repoName}>{repoName}</Text>
           </View>
-          <Text style={styles.description}>
-            React Native command line tools
-          </Text>
+          <Text style={styles.description}>{repoDetails.description}</Text>
         </View>
 
         <View style={styles.lineSeparator} />
