@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./home.styles";
-import { View, Text, Animated, TextInput, Button } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import { useAxiosGet } from "../../hooks/http-request";
 import Icon from "@expo/vector-icons/FontAwesome";
 
@@ -12,16 +12,17 @@ import RepoList from "../../components/repo-list/repo-list.component";
 // 2. Add back to top button
 
 export default function Home({ navigation }) {
+  const [gitUser, setGitUser] = useState("react-native-community");
   const [repoData, setRepoData] = useState([]);
   const [page, setPage] = useState(1);
 
-  const url = `https://api.github.com/users/react-native-community/repos?per_page=${3}&page=${page}`;
+  const url = `https://api.github.com/users/${gitUser}/repos?per_page=${3}&page=${page}`;
 
   let repos = useAxiosGet(url);
   let newRepos = repos.data;
   let content = null;
 
-  // display error message if data retrieval fails
+  // set error message if data retrieval fails
   // - Find out if you can add pull down to refresh functionality
   if (repos.error) {
     content = (
@@ -71,6 +72,7 @@ export default function Home({ navigation }) {
             isLoading={repos.loading}
             setPage={setPage}
             navigation={navigation}
+            gitUser={gitUser}
           />
         )}
       </View>

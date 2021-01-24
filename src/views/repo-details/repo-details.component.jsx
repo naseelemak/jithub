@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { View, Text, Button } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
 import styles from "./repo-details.styles";
 import { Octicons } from "@expo/vector-icons";
+import { useAxiosGet } from "../../hooks/http-request";
 
 // other component imports //
 import MyButton from "../../components/my-button/my-button.component";
@@ -10,62 +11,126 @@ import RepoStat from "../../components/repo-details/repo-stat/repo-stat.componen
 
 export default function RepoDetails({ navigation }) {
   const [stats, setStats] = useState([
+    // REPO STARS (stargazers_count)
     {
       id: 1,
       name: "star",
-      number: 1493,
+      number: 0,
       unit: "stars",
     },
+    // REPO FORKS (forks_count)
     {
       id: 2,
       name: "repo-forked",
-      number: 585,
+      number: 0,
       unit: "forks",
     },
+    // REPO WATCHERS (subscribers_count)
     {
       id: 3,
       name: "eye",
-      number: 36,
+      number: 0,
       unit: "watchers",
     },
   ]);
-  const [languages, setLanguages] = useState([
-    {
-      id: 1,
-      name: "Java",
-      percentage: "38.7%",
-    },
-    {
-      id: 2,
-      name: "Objective-C",
-      percentage: "27.6%",
-    },
-    {
-      id: 3,
-      name: "TypeScript",
-      percentage: "19.9%",
-    },
-    {
-      id: 4,
-      name: "JavaScript",
-      percentage: "5.2%",
-    },
-    {
-      id: 5,
-      name: "Ruby",
-      percentage: "4.8%",
-    },
-    {
-      id: 6,
-      name: "Starlark",
-      percentage: "3.8%",
-    },
-  ]);
+  const [languages, setLanguages] = useState([]);
 
-  return (
+  const gitUser = navigation.getParam("gitUser");
+  const repoName = navigation.getParam("repoName");
+
+  const url = `https://api.github.com/repos/${gitUser}/${repoName}`;
+
+  const repo = useAxiosGet(url);
+  const repoDetails = repo.data;
+
+  // Get repo language data using the URL from the repo API request
+  const repoLanguagesUrl = repoDetails.languages_url;
+  const repoLanguages = useAxiosGet(repoLanguagesUrl);
+  const repoLanguageDetails = repoLanguages.data;
+
+  let content = null;
+
+  // set error message if data retrieval fails
+  // - Find out if you can add pull down to refresh functionality
+  if (repo.error) {
+    content = (
+      <Text
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 30,
+          paddingHorizontal: 30,
+        }}
+      >
+        There was an error.
+        {"\n"}
+        {"\n"}Please relaunch app or try again later.
+      </Text>
+    );
+  }
+
+  if (repo.loading) {
+    content = (
+      <View style={styles.loader}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  // SETS THE STATS
+  useEffect(() => {
+    const { stargazers_count, forks_count, subscribers_count } = repoDetails;
+
+    setStats(() => [
+      // REPO STARS (stargazers_count)
+      {
+        id: 1,
+        name: "star",
+        number: stargazers_count,
+        unit: "stars",
+      },
+      // REPO FORKS (forks_count)
+      {
+        id: 2,
+        name: "repo-forked",
+        number: forks_count,
+        unit: "forks",
+      },
+      // REPO WATCHERS (subscribers_count)
+      {
+        id: 3,
+        name: "eye",
+        number: subscribers_count,
+        unit: "watchers",
+      },
+    ]);
+  }, [repoDetails]);
+
+  // SETS THE LANGUAGES
+  // calculate total units of each language and then calculate percentage
+  // useEffect(() => {
+  //   let total = 0;
+
+  //   setLanguages(() => {
+  //     repoLanguageDetails.map(([language, units], index) => {
+  //       total += units;
+
+  //       return {
+  //         id: index,
+  //         name: "Java",
+  //         percentage: "38.7%",
+  //       };
+  //     });
+  //   });
+  // }, [repoLanguageDetails]);
+
+  return repo.error || repo.loading ? (
+    content
+  ) : (
     <View style={styles.repoDetails}>
       <View style={styles.repoDetailsCard}>
-        {/* HEADING SECTION */}
+        {/* HEADING */}
         <View style={styles.heading}>
           <View style={styles.title}>
             <Octicons style={styles.icon} name="repo" size={18} />

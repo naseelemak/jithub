@@ -7,8 +7,8 @@ import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import RepoCard from "../../components/repo-card/repo-card.component";
 
 // for flatList renderItem
-const renderItem = (item, navigation) => {
-  return <RepoCard {...item} navigation={navigation} />;
+const renderItem = (item, navigation, gitUser) => {
+  return <RepoCard {...item} navigation={navigation} gitUser={gitUser} />;
 };
 
 // for flatList to load more oneEndReached
@@ -28,14 +28,14 @@ const renderFooter = (isLoading) => {
   );
 };
 
-const RepoList = ({ repoData, isLoading, setPage, navigation }) => {
+const RepoList = ({ repoData, isLoading, setPage, navigation, gitUser }) => {
   return (
     <View style={styles.flatListContainer}>
       <FlatList
         contentContainerStyle={styles.contentContainer}
         data={repoData}
         renderItem={({ item }) => {
-          return renderItem(item, navigation);
+          return renderItem(item, navigation, gitUser);
         }}
         keyExtractor={(item) => item.id.toString()}
         onEndReached={() => {

@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
     elevation: 2,
     // -- box shadows
   },
+  loader: {
+    marginTop: 30,
+    alignItems: "center",
+  },
 
   // == CONTENT == //
   icon: {

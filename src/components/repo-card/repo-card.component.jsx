@@ -4,17 +4,20 @@ import styles from "./repo-card.styles";
 // import { TouchableNativeFeedback } from "react-native-gesture-handler";
 
 // TO DO: figure out how to load specific repo detail page
-const handlePress = (navigation) => {
-  navigation.navigate("RepoDetails");
+const handlePress = (navigation, gitUser, repoName) => {
+  navigation.navigate("RepoDetails", {
+    gitUser: gitUser,
+    repoName: repoName,
+  });
 };
 
-const RepoCard = ({ name, description, navigation }) => {
+const RepoCard = ({ name, description, navigation, gitUser }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.repoCard}
         onPress={() => {
-          handlePress(navigation);
+          handlePress(navigation, gitUser, name);
         }}
       >
         <Text style={styles.repoName} numberOfLines={1} ellipsizeMode="tail">

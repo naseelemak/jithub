@@ -25,18 +25,18 @@ const stackNavigatorOptions = {
 
 // custom header used for Home to allow for potential addition of drawer navigation
 const views = {
-  RepoDetails: {
-    screen: RepoDetails,
-    navigationOptions: {
-      title: "Details",
-    },
-  },
   Home: {
     screen: Home,
     navigationOptions: {
       headerTitle: () => {
         return <Header />;
       },
+    },
+  },
+  RepoDetails: {
+    screen: RepoDetails,
+    navigationOptions: {
+      title: "Details",
     },
   },
 };
