@@ -21,12 +21,11 @@ const styles = StyleSheet.create({
     // -- box shadows
   },
   buttonPressed: {
-    elevation: 8,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    borderWidth: 2,
-    borderColor: "#A9A9A9",
+    borderWidth: 0.5,
+    borderColor: "#001021",
     backgroundColor: "#0366d6",
   },
   buttonTextNormal: {

@@ -34,13 +34,18 @@ const styles = StyleSheet.create({
     marginRight: 7,
     color: "#6a737d",
   },
+  lineSeparator: {
+    borderBottomColor: "#eaecef",
+    borderBottomWidth: 1,
+    margin: 10,
+  },
 
   // HEADING SECTION
   heading: {
     height: 80,
-    marginBottom: 40,
+    marginBottom: 20,
   },
-  name: {
+  title: {
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
@@ -65,21 +70,53 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignItems: "center",
     height: "auto",
-    marginBottom: 30,
-    borderWidth: 1,
-    borderColor: "#d9dbdb",
-    borderRadius: 5,
     padding: 10,
+    // marginBottom: 30,
+    // borderWidth: 1,
+    // borderColor: "#d9dbdb",
+    // borderRadius: 5,
   },
   stat: {
     flexDirection: "row",
+    alignItems: "center",
     marginRight: 20,
     marginVertical: 3,
+  },
+  statText: {
+    fontSize: 14,
+    fontFamily: "RobotoRegular",
   },
 
   // LANGUAGES SECTION
   languages: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
     height: "auto",
+    padding: 10,
+  },
+  languagesTitle: {
+    width: "100%",
+    marginBottom: 20,
+    color: "#5e5e5e",
+    fontSize: 18,
+    fontFamily: "RobotoBold",
+  },
+  language: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 3,
+    marginRight: 20,
+  },
+  languageName: {
+    marginRight: 7,
+    fontSize: 14,
+    fontFamily: "RobotoBold",
+  },
+  languagePercentage: {
+    color: "#5e5e5e",
+    fontSize: 14,
+    fontFamily: "RobotoRegular",
   },
 });
 
