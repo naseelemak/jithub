@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { styles } from "./home.styles";
+import styles from "./home.styles";
 import { View, Text, Animated, TextInput, Button } from "react-native";
 import { useAxiosGet } from "../../hooks/http-request";
 import Icon from "@expo/vector-icons/FontAwesome";
@@ -25,9 +25,19 @@ export default function Home({ navigation }) {
   // - Find out if you can add pull down to refresh functionality
   if (repos.error) {
     content = (
-      <p className="flex justify-center mt-3">
-        There was an error. Please relaunch app or try again later.
-      </p>
+      <Text
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 30,
+          paddingHorizontal: 30,
+        }}
+      >
+        There was an error.
+        {"\n"}
+        {"\n"}Please relaunch app or try again later.
+      </Text>
     );
   }
 
@@ -53,12 +63,16 @@ export default function Home({ navigation }) {
         </View>
 
         {/* Repo search results */}
-        <RepoList
-          repoData={repoData}
-          isLoading={repos.loading}
-          setPage={setPage}
-          navigation={navigation}
-        />
+        {repos.error ? (
+          content
+        ) : (
+          <RepoList
+            repoData={repoData}
+            isLoading={repos.loading}
+            setPage={setPage}
+            navigation={navigation}
+          />
+        )}
       </View>
     </View>
   );

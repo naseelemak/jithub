@@ -1,40 +1,42 @@
 import React from "react";
-import { styles } from "./navigator.styles";
-import { View, Text } from "react-native";
+import styles from "./navigator.styles";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 
 // other component imports //
 import Home from "../views/home/home.component";
 import RepoDetails from "../views/repo-details/repo-details.component";
+import Header from "../components/header/header.component";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 const stackNavigatorOptions = {
   headerShown: true,
-  // headerTitle: "JitHub",
-  // headerLeft: () => <Icon style={styles.icon} name="git" color="#fff" />,
-  // headerRight: () => <Text style={styles.rightHeader}>dev</Text>,
   headerStyle: {
     backgroundColor: "#24292e",
   },
   headerTintColor: "#fff",
   headerTitleAlign: "center",
   headerTitleStyle: {
-    // marginLeft: -20,
+    fontSize: 20,
+    letterSpacing: 1,
+    fontFamily: "RobotoBold",
   },
 };
 
+// custom header used for Home to allow for potential addition of drawer navigation
 const views = {
-  Home: {
-    screen: Home,
-    navigationOptions: {
-      title: "JitHub",
-    },
-  },
   RepoDetails: {
     screen: RepoDetails,
     navigationOptions: {
       title: "Details",
+    },
+  },
+  Home: {
+    screen: Home,
+    navigationOptions: {
+      headerTitle: () => {
+        return <Header />;
+      },
     },
   },
 };

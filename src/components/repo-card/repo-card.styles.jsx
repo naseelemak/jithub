@@ -1,16 +1,32 @@
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
+  // container: {
+  //   borderRadius: 10,
+  //   overflow: "hidden",
+  // },
   repoCard: {
     flex: 1,
     paddingHorizontal: 15,
     paddingVertical: 15,
-    marginBottom: 12,
+    width: "100%",
     height: 150,
     maxHeight: 150,
-    width: "100%",
     borderRadius: 10,
-    backgroundColor: "#FFF",
+    backgroundColor: "#fff",
+    marginBottom: 12,
+
+    // box shadows
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    // -- box shadows
   },
   repoName: {
     flex: 1,
@@ -28,3 +44,5 @@ export const styles = StyleSheet.create({
     fontFamily: "RobotoRegular",
   },
 });
+
+export default styles;

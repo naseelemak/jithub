@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
-import { styles } from "./repo-list.styles";
+import styles from "./repo-list.styles";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 
 // other component imports
@@ -17,11 +17,14 @@ const handleLoadMore = (setPage) => {
 };
 
 // display loading icon when data form API is still being retrieved
+// ! has error when I use isLoading ternary
 const renderFooter = (isLoading) => {
   return (
-    <View style={styles.loader}>
-      <ActivityIndicator />
-    </View>
+    isLoading && (
+      <View style={styles.loader}>
+        <ActivityIndicator />
+      </View>
+    )
   );
 };
 
@@ -29,6 +32,7 @@ const RepoList = ({ repoData, isLoading, setPage, navigation }) => {
   return (
     <View style={styles.flatListContainer}>
       <FlatList
+        contentContainerStyle={styles.contentContainer}
         data={repoData}
         renderItem={({ item }) => {
           return renderItem(item, navigation);
