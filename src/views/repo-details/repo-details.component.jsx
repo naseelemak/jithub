@@ -1,63 +1,41 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text } from "react-native";
 import styles from "./repo-details.styles";
-import { Octicons } from "@expo/vector-icons";
 import { useAxiosGet } from "../../hooks/http-request";
+import { Octicons } from "@expo/vector-icons";
 
 // other component imports //
+import Loader from "../../components/loader/loader.component";
 import MyButton from "../../components/my-button/my-button.component";
 import RepoLanguage from "../../components/repo-details/repo-language/repo-language.component";
 import RepoStat from "../../components/repo-details/repo-stat/repo-stat.component";
 
 export default function RepoDetails({ navigation }) {
-  const [stats, setStats] = useState([
-    // REPO STARS (stargazers_count)
-    {
-      id: 1,
-      name: "star",
-      number: 0,
-      unit: "stars",
-    },
-    // REPO FORKS (forks_count)
-    {
-      id: 2,
-      name: "repo-forked",
-      number: 0,
-      unit: "forks",
-    },
-    // REPO WATCHERS (subscribers_count)
-    {
-      id: 3,
-      name: "eye",
-      number: 0,
-      unit: "watchers",
-    },
-  ]);
+  const [stats, setStats] = useState([]);
   const [languages, setLanguages] = useState([]);
-  const languageTotalUnits = useRef(0); // for calculating language percentage
 
   const gitUser = navigation.getParam("gitUser");
   const repoName = navigation.getParam("repoName");
 
   const url = `https://api.github.com/repos/${gitUser}/${repoName}`;
 
-  // Get REPO data using the URL from the repo API request
+  // Get REPO data
   // ====================================================
   const repo = useAxiosGet(url);
-  const repoDetails = repo.data;
+  const repoData = repo.data;
   // ====================================================
 
-  // Get repo LANGUAGE data using the URL from the repo API request
+  // Get repo LANGUAGE data using the language URL from the previous API request
   // ====================================================
   useEffect(() => {}, [repoLanguagesUrl]);
-  const repoLanguagesUrl = repoDetails.languages_url;
+  const repoLanguagesUrl = repoData.languages_url;
   const repoLanguages = useAxiosGet(repoLanguagesUrl);
   const repoLanguageData = repoLanguages.data;
 
   // SETS THE STATS
   // ===================================================
   useEffect(() => {
-    const { stargazers_count, forks_count, subscribers_count } = repoDetails;
+    const { stargazers_count, forks_count, subscribers_count } = repoData;
 
     setStats(() => [
       // REPO STARS (stargazers_count)
@@ -82,23 +60,27 @@ export default function RepoDetails({ navigation }) {
         unit: "watchers",
       },
     ]);
-  }, [repoDetails]);
+  }, [repoData]);
   // ===================================================
 
   // SETS THE LANGUAGES
   // ===================================================
   // calculates total units of each language and then calculates the percentages
-  // - Do more research on the reduce() function
   useEffect(() => {
     const repoLanguageDetails = Object.entries(repoLanguageData).map(
       ([language, units]) => {
-        languageTotalUnits.current += units;
         return { name: language, units: units };
       }
     );
 
+    // Gets the total quantity of language units to calculate percentage
+    const totalLanguageUnits = repoLanguageDetails.reduce(
+      (accumulatedQuantity, lang) => accumulatedQuantity + lang.units,
+      0
+    );
+
     const newLanguages = repoLanguageDetails.map(({ name, units }, index) => {
-      let percentage = units / languageTotalUnits.current;
+      let percentage = units / totalLanguageUnits;
       percentage = Math.round(percentage * 1000) / 10;
 
       return {
@@ -112,21 +94,12 @@ export default function RepoDetails({ navigation }) {
   }, [repoLanguageData]);
   // ===================================================
 
-  let content = null;
+  let content = <Loader />;
 
   // set error message if data retrieval fails
-  // - Find out if you can add pull down to refresh functionality
   if (repo.error) {
     content = (
-      <Text
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: 30,
-          paddingHorizontal: 30,
-        }}
-      >
+      <Text style={styles.error}>
         There was an error.
         {"\n"}
         {"\n"}Please relaunch app or try again later.
@@ -134,18 +107,29 @@ export default function RepoDetails({ navigation }) {
     );
   }
 
-  if (repo.loading || repoLanguages.loading || repoLanguages.error) {
-    content = (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#999999" />
-      </View>
-    );
+  // default languageList
+  let languageList = (
+    <View style={styles.noLanguages}>
+      <Text style={styles.noLanguagesNote}>
+        No programming languages detected
+      </Text>
+    </View>
+  );
+
+  if (languages.length > 0) {
+    console.log("I ran");
+    languageList = languages.map((language) => {
+      return <RepoLanguage key={language.id} {...language} />;
+    });
   }
 
-  return repo.loading ||
-    repoLanguages.loading ||
-    repo.error ||
-    repoLanguages.error ? (
+  // - repoLanguages.error returns true a few times because url is undefined at first. Fix it
+  // if (repo.loading || repoLanguages.loading || repoLanguages.error) {
+  //   content = <Loader />;
+  // }
+
+  // find a way...
+  return !(languages.length > 0) ? (
     content
   ) : (
     <View style={styles.repoDetails}>
@@ -160,7 +144,7 @@ export default function RepoDetails({ navigation }) {
             <Text>{" / "}</Text>
             <Text style={styles.repoName}>{repoName}</Text>
           </View>
-          <Text style={styles.description}>{repoDetails.description}</Text>
+          <Text style={styles.description}>{repoData.description}</Text>
         </View>
 
         <View style={styles.lineSeparator} />
@@ -177,9 +161,7 @@ export default function RepoDetails({ navigation }) {
         {/* LANGUAGES SECTION */}
         <View style={styles.languages}>
           <Text style={styles.languagesTitle}>Languages</Text>
-          {languages.map((language) => {
-            return <RepoLanguage key={language.id} {...language} />;
-          })}
+          {languages.length > 0 ? languageList : <Loader />}
           <Text style={styles.languagesNote}>
             *percentages are rounded to the first decimal place
           </Text>

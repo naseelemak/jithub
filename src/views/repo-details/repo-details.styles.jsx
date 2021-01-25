@@ -28,9 +28,14 @@ const styles = StyleSheet.create({
     elevation: 2,
     // -- box shadows
   },
-  loader: {
-    marginTop: 30,
+
+  // == MISC == //
+  error: {
+    flex: 1,
     alignItems: "center",
+    justifyContent: "center",
+    marginTop: 30,
+    paddingHorizontal: 30,
   },
 
   // == CONTENT == //
@@ -107,20 +112,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "RobotoBold",
   },
-  language: {
+  noLanguages: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     marginVertical: 3,
     marginRight: 20,
   },
-  languageName: {
+  noLanguagesNote: {
     marginRight: 7,
-    fontSize: 14,
-    fontFamily: "RobotoBold",
-  },
-  languagePercentage: {
-    color: "#5e5e5e",
-    fontSize: 14,
+    fontSize: 12,
+    fontStyle: "italic",
     fontFamily: "RobotoRegular",
   },
   languagesNote: {
@@ -128,6 +130,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     color: "#5e5e5e",
     fontSize: 10,
+    fontFamily: "RobotoRegular",
   },
 });
 
