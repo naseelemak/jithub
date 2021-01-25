@@ -8,7 +8,7 @@ const RepoLanguage = ({ name, percentage }) => {
     <View style={styles.language}>
       <Octicons style={styles.icon} name="primitive-dot" size={14} />
       <Text style={styles.languageName}>{name}</Text>
-      <Text style={styles.languagePercentage}>{percentage}</Text>
+      <Text style={styles.languagePercentage}>{percentage}%</Text>
     </View>
   );
 };

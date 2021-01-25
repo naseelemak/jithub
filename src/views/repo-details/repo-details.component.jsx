@@ -34,7 +34,7 @@ export default function RepoDetails({ navigation }) {
     },
   ]);
   const [languages, setLanguages] = useState([]);
-  const languageTotalUnits = useRef(0);
+  const languageTotalUnits = useRef(0); // for calculating language percentage
 
   const gitUser = navigation.getParam("gitUser");
   const repoName = navigation.getParam("repoName");
@@ -49,6 +49,7 @@ export default function RepoDetails({ navigation }) {
 
   // Get repo LANGUAGE data using the URL from the repo API request
   // ====================================================
+  useEffect(() => {}, [repoLanguagesUrl]);
   const repoLanguagesUrl = repoDetails.languages_url;
   const repoLanguages = useAxiosGet(repoLanguagesUrl);
   const repoLanguageData = repoLanguages.data;
@@ -103,7 +104,7 @@ export default function RepoDetails({ navigation }) {
       return {
         id: index,
         name: name,
-        percentage: percentage + "%",
+        percentage: percentage,
       };
     });
 
@@ -115,7 +116,7 @@ export default function RepoDetails({ navigation }) {
 
   // set error message if data retrieval fails
   // - Find out if you can add pull down to refresh functionality
-  if (repo.error || repoLanguages.error) {
+  if (repo.error) {
     content = (
       <Text
         style={{
@@ -133,18 +134,18 @@ export default function RepoDetails({ navigation }) {
     );
   }
 
-  if (repo.loading || repoLanguages.loading) {
+  if (repo.loading || repoLanguages.loading || repoLanguages.error) {
     content = (
       <View style={styles.loader}>
-        <ActivityIndicator />
+        <ActivityIndicator size="large" color="#999999" />
       </View>
     );
   }
 
-  return repo.error ||
-    repo.loading ||
-    repoLanguages.error ||
-    repoLanguages.loading ? (
+  return repo.loading ||
+    repoLanguages.loading ||
+    repo.error ||
+    repoLanguages.error ? (
     content
   ) : (
     <View style={styles.repoDetails}>
@@ -153,10 +154,7 @@ export default function RepoDetails({ navigation }) {
         <View style={styles.heading}>
           <View style={styles.title}>
             <Octicons style={styles.icon} name="repo" size={18} />
-            <Text
-              style={styles.userName}
-              onPress={() => navigation.navigate("Home")}
-            >
+            <Text style={styles.userName} onPress={() => navigation.goBack()}>
               {gitUser}
             </Text>
             <Text>{" / "}</Text>
@@ -182,6 +180,9 @@ export default function RepoDetails({ navigation }) {
           {languages.map((language) => {
             return <RepoLanguage key={language.id} {...language} />;
           })}
+          <Text style={styles.languagesNote}>
+            *percentages are rounded to the first decimal place
+          </Text>
         </View>
 
         <View style={styles.lineSeparator} />
@@ -190,7 +191,7 @@ export default function RepoDetails({ navigation }) {
       <MyButton
         title="Back to Repositories"
         onPress={() => {
-          navigation.navigate("Home");
+          navigation.goBack();
         }}
       />
     </View>

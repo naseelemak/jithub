@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   heading: {
     height: 80,
     marginBottom: 20,
+    paddingHorizontal: 10,
   },
   title: {
     flexDirection: "row",
@@ -121,6 +122,12 @@ const styles = StyleSheet.create({
     color: "#5e5e5e",
     fontSize: 14,
     fontFamily: "RobotoRegular",
+  },
+  languagesNote: {
+    width: "100%",
+    marginVertical: 10,
+    color: "#5e5e5e",
+    fontSize: 10,
   },
 });
 

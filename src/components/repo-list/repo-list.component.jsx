@@ -41,12 +41,8 @@ const RepoList = ({ repoData, isLoading, setPage, navigation, gitUser }) => {
         onEndReached={() => {
           handleLoadMore(setPage);
         }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          <View style={styles.loader}>
-            <ActivityIndicator />
-          </View>
-        }
+        onEndReachedThreshold={0.8}
+        ListFooterComponent={renderFooter}
         showsVerticalScrollIndicator={true}
       />
     </View>
