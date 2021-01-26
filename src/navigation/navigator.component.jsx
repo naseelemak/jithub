@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./navigator.styles";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 
@@ -7,7 +6,6 @@ import { createAppContainer } from "react-navigation";
 import Home from "../views/home/home.component";
 import RepoDetails from "../views/repo-details/repo-details.component";
 import Header from "../components/header/header.component";
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 const stackNavigatorOptions = {
   headerShown: true,

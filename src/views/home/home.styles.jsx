@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
   },
+
+  // == CONTENT == //
+  // SEARCH BAR SECTION
   topContainer: {
     paddingHorizontal: 30,
     marginTop: 25,

@@ -4,6 +4,10 @@ import { View, Text, TextInput } from "react-native";
 import { useAxiosGet } from "../../hooks/http-request";
 import Icon from "@expo/vector-icons/FontAwesome";
 
+// redux imports
+import { useDispatch, useSelector } from "react-redux";
+import { setGitUser } from "../../redux/gituser/gituser.actions";
+
 // other component imports //
 import RepoList from "../../components/home/repo-list/repo-list.component";
 
@@ -12,10 +16,19 @@ import RepoList from "../../components/home/repo-list/repo-list.component";
 // 2. Add back to top button if you make search bar disappear on scroll
 
 export default function Home({ navigation }) {
-  const [gitUser, setGitUser] = useState("react-native-community");
+  const dispatch = useDispatch();
+
   const [repoData, setRepoData] = useState([]);
   const [page, setPage] = useState(1);
   const [searchField, setSearchField] = useState("");
+
+  // SETS GIT USER
+  // ===================================================
+  // might allow users to change GitHub users in the future
+  // let gitUserInput = "naseelemak";
+  // dispatch(setGitUser(gitUserInput));
+  const gitUser = useSelector((state) => state.gitUser.currentUser);
+  // ===================================================
 
   const url = `https://api.github.com/users/${gitUser}/repos?per_page=${6}&page=${page}`;
 
@@ -66,8 +79,8 @@ export default function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Repo search bar */}
       <View style={styles.body}>
+        {/* Search bar section */}
         <View style={styles.topContainer}>
           <Text style={styles.gitUsername}>React Native Community</Text>
           <View style={styles.searchBar}>
