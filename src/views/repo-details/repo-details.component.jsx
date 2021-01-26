@@ -4,16 +4,19 @@ import styles from "./repo-details.styles";
 import { useAxiosGet } from "../../hooks/http-request";
 import { Octicons } from "@expo/vector-icons";
 
+// redux imports
+import { useSelector } from "react-redux";
+
 // other component imports //
 import Loader from "../../components/loader/loader.component";
 import MyButton from "../../components/my-button/my-button.component";
 import RepoLanguageList from "../../components/repo-details/repo-language-list/repo-langauge-list.component";
 import RepoStatList from "../../components/repo-details/repo-stat-list/repo-stat-list.component";
 
-export default function RepoDetails({ navigation }) {
-  const gitUser = navigation.getParam("gitUser");
-  const repoName = navigation.getParam("repoName");
-  const languageFlag = navigation.getParam("languageFlag");
+export default function RepoDetails({ navigation, route }) {
+  const gitUser = useSelector((state) => state.gitUser.currentUser);
+  const repoName = route.params.repoName;
+  const languageFlag = route.params.languageFlag;
 
   const url = `https://api.github.com/repos/${gitUser}/${repoName}`;
 

@@ -7,8 +7,8 @@ import { FlatList } from "react-native-gesture-handler";
 import RepoCard from "../repo-card/repo-card.component";
 
 // for flatList renderItem
-const renderItem = (item, navigation, gitUser) => {
-  return <RepoCard {...item} navigation={navigation} gitUser={gitUser} />;
+const renderItem = (item) => {
+  return <RepoCard {...item} />;
 };
 
 // for flatList to load more oneEndReached
@@ -28,14 +28,14 @@ const renderFooter = (isLoading) => {
   );
 };
 
-const RepoList = ({ repoData, isLoading, setPage, navigation, gitUser }) => {
+const RepoList = ({ repoData, isLoading, setPage }) => {
   return (
     <View style={styles.flatListContainer}>
       <FlatList
         contentContainerStyle={styles.contentContainer}
         data={repoData}
         renderItem={({ item }) => {
-          return renderItem(item, navigation, gitUser);
+          return renderItem(item);
         }}
         keyExtractor={(item) => item.id.toString()}
         onEndReached={() => {

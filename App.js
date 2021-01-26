@@ -1,13 +1,20 @@
+import "react-native-gesture-handler";
 import React, { useRef } from "react";
 import { useFonts } from "expo-font";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 // redux imports
 import { Provider } from "react-redux";
 import store from "./src/redux/store";
 
 // other component imports //
-import AppNavigator from "./src/navigation/navigator.component";
+import Home from "./src/views/home/home.component";
+import RepoDetails from "./src/views/repo-details/repo-details.component";
+import Header from "./src/components/header/header.component";
 import AppLoading from "expo-app-loading";
+
+const Stack = createStackNavigator();
 
 function App() {
   // const fontsFlag = useRef(0);
@@ -21,7 +28,38 @@ function App() {
 
   return fontsLoaded ? (
     <Provider store={store}>
-      <AppNavigator />
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#24292e",
+            },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontSize: 20,
+              letterSpacing: 1,
+            },
+          }}
+        >
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              headerTitle: () => {
+                return <Header />;
+              },
+            }}
+          />
+          <Stack.Screen
+            name="RepoDetails"
+            component={RepoDetails}
+            options={{ title: "Details" }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   ) : (
     <AppLoading />

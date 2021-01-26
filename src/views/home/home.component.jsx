@@ -15,7 +15,7 @@ import RepoList from "../../components/home/repo-list/repo-list.component";
 // 1. Make a better header
 // 2. Add back to top button if you make search bar disappear on scroll
 
-export default function Home({ navigation }) {
+export default function Home() {
   const dispatch = useDispatch();
 
   const [repoData, setRepoData] = useState([]);
@@ -104,7 +104,6 @@ export default function Home({ navigation }) {
             repoData={filteredRepos}
             isLoading={repos.loading}
             setPage={setPage}
-            navigation={navigation}
             gitUser={gitUser}
           />
         )}
