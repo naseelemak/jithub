@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import styles from "./repo-list.styles";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 
 // other component imports
-import RepoCard from "../../components/repo-card/repo-card.component";
+import RepoCard from "../repo-card/repo-card.component";
 
 // for flatList renderItem
 const renderItem = (item, navigation, gitUser) => {

@@ -5,7 +5,7 @@ import { useAxiosGet } from "../../hooks/http-request";
 import Icon from "@expo/vector-icons/FontAwesome";
 
 // other component imports //
-import RepoList from "../../components/repo-list/repo-list.component";
+import RepoList from "../../components/home/repo-list/repo-list.component";
 
 // TODO:
 // 1. Make a better header

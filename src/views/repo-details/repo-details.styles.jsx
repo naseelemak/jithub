@@ -64,65 +64,6 @@ const styles = StyleSheet.create({
     fontFamily: "RobotoRegular",
   },
 
-  // STATS SECTION
-  stats: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    height: "auto",
-    padding: 10,
-    // marginBottom: 30,
-    // borderWidth: 1,
-    // borderColor: "#d9dbdb",
-    // borderRadius: 5,
-  },
-  stat: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 20,
-    marginVertical: 3,
-  },
-  statText: {
-    fontSize: 14,
-    fontFamily: "RobotoRegular",
-  },
-
-  // LANGUAGES SECTION
-  languages: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    height: "auto",
-    padding: 10,
-  },
-  languagesTitle: {
-    width: "100%",
-    marginBottom: 20,
-    color: "#5e5e5e",
-    fontSize: 18,
-    fontFamily: "RobotoBold",
-  },
-  noLanguages: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 3,
-    marginRight: 20,
-  },
-  noLanguagesNote: {
-    marginRight: 7,
-    fontSize: 12,
-    fontStyle: "italic",
-    fontFamily: "RobotoRegular",
-  },
-  languagesNote: {
-    width: "100%",
-    marginVertical: 10,
-    color: "#5e5e5e",
-    fontSize: 10,
-    fontFamily: "RobotoRegular",
-  },
-
   // == MISC == //
   error: {
     flex: 1,

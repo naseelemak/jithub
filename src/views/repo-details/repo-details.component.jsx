@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, Text } from "react-native";
 import styles from "./repo-details.styles";
 import { useAxiosGet } from "../../hooks/http-request";
@@ -7,13 +7,10 @@ import { Octicons } from "@expo/vector-icons";
 // other component imports //
 import Loader from "../../components/loader/loader.component";
 import MyButton from "../../components/my-button/my-button.component";
-import RepoLanguage from "../../components/repo-details/repo-language/repo-language.component";
-import RepoStat from "../../components/repo-details/repo-stat/repo-stat.component";
+import RepoLanguageList from "../../components/repo-details/repo-language-list/repo-langauge-list.component";
+import RepoStatList from "../../components/repo-details/repo-stat-list/repo-stat-list.component";
 
 export default function RepoDetails({ navigation }) {
-  const [stats, setStats] = useState([]);
-  const [languages, setLanguages] = useState([]);
-
   const gitUser = navigation.getParam("gitUser");
   const repoName = navigation.getParam("repoName");
   const languageFlag = navigation.getParam("languageFlag");
@@ -28,91 +25,10 @@ export default function RepoDetails({ navigation }) {
 
   // Get repo LANGUAGE data using the language URL from the previous API request
   // ====================================================
-  useEffect(() => {}, [repoLanguagesUrl]);
   const repoLanguagesUrl = repoData.languages_url;
   const repoLanguages = useAxiosGet(repoLanguagesUrl);
   const repoLanguageData = repoLanguages.data;
-
-  // SETS THE STATS
-  // ===================================================
-  useEffect(() => {
-    const { stargazers_count, forks_count, subscribers_count } = repoData;
-
-    setStats(() => [
-      // REPO STARS (stargazers_count)
-      {
-        id: 1,
-        name: "star",
-        number: stargazers_count,
-        unit: "stars",
-      },
-      // REPO FORKS (forks_count)
-      {
-        id: 2,
-        name: "repo-forked",
-        number: forks_count,
-        unit: "forks",
-      },
-      // REPO WATCHERS (subscribers_count)
-      {
-        id: 3,
-        name: "eye",
-        number: subscribers_count,
-        unit: "watchers",
-      },
-    ]);
-  }, [repoData]);
-  // ===================================================
-
-  // SETS THE LANGUAGES
-  // ===================================================
-  // calculates total units of each language and then calculates the percentages
-  useEffect(() => {
-    const repoLanguageDetails = Object.entries(repoLanguageData).map(
-      ([language, units]) => {
-        return { name: language, units: units };
-      }
-    );
-
-    // Gets the total quantity of language units to calculate percentage
-    const totalLanguageUnits = repoLanguageDetails.reduce(
-      (accumulatedQuantity, lang) => accumulatedQuantity + lang.units,
-      0
-    );
-
-    const newLanguages = repoLanguageDetails.map(({ name, units }, index) => {
-      let percentage = units / totalLanguageUnits;
-      percentage = Math.round(percentage * 1000) / 10;
-
-      return {
-        id: index,
-        name: name,
-        percentage: percentage,
-      };
-    });
-
-    setLanguages(newLanguages);
-  }, [repoLanguageData]);
-
-  // default languageList
-  let languageList = <Loader />;
-
-  if (languageFlag === null) {
-    languageList = (
-      <View style={styles.noLanguages}>
-        <Text style={styles.noLanguagesNote}>
-          No programming languages detected
-        </Text>
-      </View>
-    );
-  }
-
-  if (languages.length > 0) {
-    languageList = languages.map((language) => {
-      return <RepoLanguage key={language.id} {...language} />;
-    });
-  }
-  // ===================================================
+  // ====================================================
 
   let content = <Loader />;
 
@@ -154,22 +70,15 @@ export default function RepoDetails({ navigation }) {
         <View style={styles.lineSeparator} />
 
         {/* STATS SECTION */}
-        <View style={styles.stats}>
-          {stats.map((stat) => {
-            return <RepoStat key={stat.id} {...stat} />;
-          })}
-        </View>
+        <RepoStatList repoData={repoData} />
 
         <View style={styles.lineSeparator} />
 
         {/* LANGUAGES SECTION */}
-        <View style={styles.languages}>
-          <Text style={styles.languagesTitle}>Languages</Text>
-          {languageList}
-          <Text style={styles.languagesNote}>
-            *percentages are rounded to the first decimal place
-          </Text>
-        </View>
+        <RepoLanguageList
+          repoLanguageData={repoLanguageData}
+          languageFlag={languageFlag}
+        />
 
         <View style={styles.lineSeparator} />
       </View>
