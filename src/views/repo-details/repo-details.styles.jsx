@@ -29,15 +29,6 @@ const styles = StyleSheet.create({
     // -- box shadows
   },
 
-  // == MISC == //
-  error: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 30,
-    paddingHorizontal: 30,
-  },
-
   // == CONTENT == //
   icon: {
     marginRight: 7,
@@ -51,7 +42,6 @@ const styles = StyleSheet.create({
 
   // HEADING SECTION
   heading: {
-    height: 80,
     marginBottom: 20,
     paddingHorizontal: 10,
   },
@@ -131,6 +121,15 @@ const styles = StyleSheet.create({
     color: "#5e5e5e",
     fontSize: 10,
     fontFamily: "RobotoRegular",
+  },
+
+  // == MISC == //
+  error: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 30,
+    paddingHorizontal: 30,
   },
 });
 

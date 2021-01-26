@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   loader: {
-    marginTop: 30,
+    marginTop: 20,
     alignItems: "center",
   },
 });

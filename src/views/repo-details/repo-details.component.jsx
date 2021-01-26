@@ -16,6 +16,7 @@ export default function RepoDetails({ navigation }) {
 
   const gitUser = navigation.getParam("gitUser");
   const repoName = navigation.getParam("repoName");
+  const languageFlag = navigation.getParam("languageFlag");
 
   const url = `https://api.github.com/repos/${gitUser}/${repoName}`;
 
@@ -92,6 +93,25 @@ export default function RepoDetails({ navigation }) {
 
     setLanguages(newLanguages);
   }, [repoLanguageData]);
+
+  // default languageList
+  let languageList = <Loader />;
+
+  if (languageFlag === null) {
+    languageList = (
+      <View style={styles.noLanguages}>
+        <Text style={styles.noLanguagesNote}>
+          No programming languages detected
+        </Text>
+      </View>
+    );
+  }
+
+  if (languages.length > 0) {
+    languageList = languages.map((language) => {
+      return <RepoLanguage key={language.id} {...language} />;
+    });
+  }
   // ===================================================
 
   let content = <Loader />;
@@ -107,29 +127,13 @@ export default function RepoDetails({ navigation }) {
     );
   }
 
-  // default languageList
-  let languageList = (
-    <View style={styles.noLanguages}>
-      <Text style={styles.noLanguagesNote}>
-        No programming languages detected
-      </Text>
-    </View>
-  );
-
-  if (languages.length > 0) {
-    console.log("I ran");
-    languageList = languages.map((language) => {
-      return <RepoLanguage key={language.id} {...language} />;
-    });
+  // - repoLanguages.error returns true a few times because url is undefined at first. Fix it
+  if (repo.loading || repoLanguages.loading || repoLanguages.error) {
+    content = <Loader />;
   }
 
-  // - repoLanguages.error returns true a few times because url is undefined at first. Fix it
-  // if (repo.loading || repoLanguages.loading || repoLanguages.error) {
-  //   content = <Loader />;
-  // }
-
   // find a way...
-  return !(languages.length > 0) ? (
+  return repo.loading || repoLanguages.loading || repoLanguages.error ? (
     content
   ) : (
     <View style={styles.repoDetails}>
@@ -161,7 +165,7 @@ export default function RepoDetails({ navigation }) {
         {/* LANGUAGES SECTION */}
         <View style={styles.languages}>
           <Text style={styles.languagesTitle}>Languages</Text>
-          {languages.length > 0 ? languageList : <Loader />}
+          {languageList}
           <Text style={styles.languagesNote}>
             *percentages are rounded to the first decimal place
           </Text>
