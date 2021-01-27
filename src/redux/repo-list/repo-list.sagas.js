@@ -2,9 +2,8 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import { useEffect, useState } from "react";
 import Axios from "axios";
 
-const url = `https://api.github.com/users/${"react-native-community"}/repos?per_page=${2}&page=${"1"}`;
-
-function getApi() {
+// - change this to arrow function for consistency
+function getApi(url) {
   return Axios.get(url)
     .then((response) => response.data)
     .catch((error) => {
@@ -14,15 +13,15 @@ function getApi() {
 
 function* fetchRepoList(action) {
   try {
-    const repoList = yield call(getApi);
-    yield put({ type: "GET_REPOLIST_SUCCESS", payload: repoList });
+    const repoList = yield call(getApi, action.payload);
+    yield put({ type: "SET_REPOLIST_SUCCESS", payload: repoList });
   } catch (error) {
-    yield put({ type: "GET_REPOLIST_FAILED", payload: error.message });
+    yield put({ type: "SET_REPOLIST_FAILED", payload: false });
   }
 }
 
 function* repoListSaga() {
-  yield takeEvery("GET_REPOLIST_REQUESTED", fetchRepoList);
+  yield takeEvery("SET_REPOLIST_REQUESTED", fetchRepoList);
 }
 
 export default repoListSaga;

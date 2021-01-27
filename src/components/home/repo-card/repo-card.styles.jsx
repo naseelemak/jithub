@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   },
   repoDescription: {
     flex: 2,
+    flexWrap: "wrap",
     marginTop: 5,
     fontSize: 14,
     color: "#808080",

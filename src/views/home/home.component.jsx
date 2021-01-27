@@ -1,70 +1,46 @@
 import React, { useState, useEffect } from "react";
 import styles from "./home.styles";
 import { View, Text, TextInput } from "react-native";
-import { useAxiosGet } from "../../hooks/http-request";
 import Icon from "@expo/vector-icons/FontAwesome";
 
 // redux imports
 import { useDispatch, useSelector } from "react-redux";
 import { setGitUser } from "../../redux/gitUser/gituser.actions";
+import { setRepoList } from "../../redux/repo-list/repo-list.actions";
 
 // other component imports //
 import RepoList from "../../components/home/repo-list/repo-list.component";
+import Error from "../../components/error/error.component";
 
 // TODO:
 // 1. Make a better header
 // 2. Add back to top button if you make search bar disappear on scroll
 
 export default function Home() {
-  const dispatch = useDispatch();
-
-  const [repoData, setRepoData] = useState([]);
   const [page, setPage] = useState(1);
+  const [loadedAll, setLoadedAll] = useState(false);
   const [searchField, setSearchField] = useState("");
 
-  // SETS GIT USER
-  // ===================================================
-  // might allow users to change GitHub users in the future
-  // let gitUserInput = "naseelemak";
-  // dispatch(setGitUser(gitUserInput));
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.repoList.loading);
+  const error = useSelector((state) => state.repoList.error);
+  const repoData = useSelector((state) => state.repoList.data);
   const gitUser = useSelector((state) => state.gitUser.currentUser);
-  // ===================================================
 
   const url = `https://api.github.com/users/${gitUser}/repos?per_page=${6}&page=${page}`;
 
-  let repos = useAxiosGet(url);
-  let newRepos = repos.data;
+  useEffect(() => {
+    dispatch(setRepoList(url));
+  }, [url]);
+
   let content = null;
 
   // SETS ERROR MESSAGE if data retrieval fails
   // ===================================================
   // - Find out if you can add "pull down to refresh"
-  if (repos.error) {
-    content = (
-      <Text
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: 30,
-          paddingHorizontal: 30,
-        }}
-      >
-        There was an error.
-        {"\n"}
-        {"\n"}Please relaunch app or try again later.
-      </Text>
-    );
+  if (error) {
+    content = <Error />;
   }
-  // ===================================================
-
-  // SETS REPO DATA
-  // ===================================================
-  useEffect(() => {
-    setRepoData((prevRepoData) => {
-      return prevRepoData.concat(newRepos);
-    });
-  }, [newRepos]);
   // ===================================================
 
   // SEARCH BAR FUNCTIONS
@@ -82,7 +58,7 @@ export default function Home() {
       <View style={styles.body}>
         {/* Search bar section */}
         <View style={styles.topContainer}>
-          <Text style={styles.gitUsername}>React Native Community</Text>
+          <Text style={styles.gitUsername}>{gitUser}</Text>
           <View style={styles.searchBar}>
             <Icon style={styles.searchIcon} name="search" />
             <TextInput
@@ -97,12 +73,12 @@ export default function Home() {
         </View>
 
         {/* Repo search results */}
-        {repos.error ? (
+        {error ? (
           content
         ) : (
           <RepoList
             repoData={filteredRepos}
-            isLoading={repos.loading}
+            isLoading={isLoading}
             setPage={setPage}
             gitUser={gitUser}
           />

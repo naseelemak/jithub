@@ -9,7 +9,6 @@ import { Provider } from "react-redux";
 import store from "./src/redux/store";
 
 // other component imports //
-import HomeTest from "./src/views/home-test/home-test.component";
 import Home from "./src/views/home/home.component";
 import RepoDetails from "./src/views/repo-details/repo-details.component";
 import Header from "./src/components/header/header.component";
@@ -31,7 +30,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Home-Test"
+          initialRouteName="Home"
           screenOptions={{
             headerShown: true,
             headerStyle: {
@@ -46,15 +45,6 @@ function App() {
             },
           }}
         >
-          <Stack.Screen
-            name="Home-Test"
-            component={HomeTest}
-            options={{
-              headerTitle: () => {
-                return <Header />;
-              },
-            }}
-          />
           <Stack.Screen
             name="Home"
             component={Home}

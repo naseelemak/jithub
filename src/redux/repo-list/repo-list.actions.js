@@ -1,4 +1,4 @@
-export const setRepoList = (repoList) => ({
-  type: "GET_REPOLIST_REQUESTED",
-  payload: repoList,
+export const setRepoList = (url) => ({
+  type: "SET_REPOLIST_REQUESTED",
+  payload: url,
 });

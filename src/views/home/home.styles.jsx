@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     fontFamily: "RobotoBold",
   },
   searchBar: {
+    width: "100%",
     flexDirection: "row",
     backgroundColor: "#FFF",
     borderRadius: 40,

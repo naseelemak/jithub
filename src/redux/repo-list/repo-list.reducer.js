@@ -6,22 +6,22 @@ const INITIAL_STATE = {
 
 const repoListReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "GET_REPOLIST_REQUESTED":
+    case "SET_REPOLIST_REQUESTED":
       return {
         ...state,
         loading: true,
       };
-    case "GET_REPOLIST_SUCCESS":
+    case "SET_REPOLIST_SUCCESS":
       return {
         ...state,
         loading: false,
-        data: action.payload,
+        data: [...state.data, ...action.payload],
       };
-    case "GET_REPOLIST_FAILED":
+    case "SET_REPOLIST_FAILED":
       return {
         ...state,
         loading: false,
-        data: action.payload,
+        error: action.payload,
       };
     default:
       return state;

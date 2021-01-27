@@ -42,7 +42,11 @@ const RepoList = ({ repoData, isLoading, setPage }) => {
           handleLoadMore(setPage);
         }}
         onEndReachedThreshold={0.8}
-        ListFooterComponent={renderFooter(isLoading)}
+        ListFooterComponent={
+          <View style={styles.loader}>
+            <ActivityIndicator />
+          </View>
+        }
         showsVerticalScrollIndicator={true}
       />
     </View>
