@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./home.styles";
+import styles from "./home-test.styles";
 import { View, Text, TextInput } from "react-native";
 import { useAxiosGet } from "../../hooks/http-request";
 import Icon from "@expo/vector-icons/FontAwesome";
@@ -7,6 +7,7 @@ import Icon from "@expo/vector-icons/FontAwesome";
 // redux imports
 import { useDispatch, useSelector } from "react-redux";
 import { setGitUser } from "../../redux/gitUser/gituser.actions";
+import { setRepoList } from "../../redux/repo-list/repo-list.actions";
 
 // other component imports //
 import RepoList from "../../components/home/repo-list/repo-list.component";
@@ -15,8 +16,21 @@ import RepoList from "../../components/home/repo-list/repo-list.component";
 // 1. Make a better header
 // 2. Add back to top button if you make search bar disappear on scroll
 
-export default function Home() {
+export default function HomeTest() {
   const dispatch = useDispatch();
+  const newRepos = useSelector((state) => state.repoList.data);
+  const sagaLoading = useSelector((state) => state.repoList.loading);
+  const sagaError = useSelector((state) => state.repoList.error);
+
+  useEffect(() => {
+    dispatch(setRepoList());
+  }, []);
+
+  console.log(sagaLoading);
+
+  // if (!sagaLoading) {
+  //   console.log(sagaRepo[0].name);
+  // }
 
   const [repoData, setRepoData] = useState([]);
   const [page, setPage] = useState(1);
@@ -32,31 +46,9 @@ export default function Home() {
 
   const url = `https://api.github.com/users/${gitUser}/repos?per_page=${6}&page=${page}`;
 
-  let repos = useAxiosGet(url);
-  let newRepos = repos.data;
+  // let repos = useAxiosGet(url);
+  // let newRepos = repos.data;
   let content = null;
-
-  // SETS ERROR MESSAGE if data retrieval fails
-  // ===================================================
-  // - Find out if you can add "pull down to refresh"
-  if (repos.error) {
-    content = (
-      <Text
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: 30,
-          paddingHorizontal: 30,
-        }}
-      >
-        There was an error.
-        {"\n"}
-        {"\n"}Please relaunch app or try again later.
-      </Text>
-    );
-  }
-  // ===================================================
 
   // SETS REPO DATA
   // ===================================================
@@ -82,7 +74,7 @@ export default function Home() {
       <View style={styles.body}>
         {/* Search bar section */}
         <View style={styles.topContainer}>
-          <Text style={styles.gitUsername}>React Native Community</Text>
+          <Text style={styles.gitUsername}>Home-Test</Text>
           <View style={styles.searchBar}>
             <Icon style={styles.searchIcon} name="search" />
             <TextInput
@@ -97,12 +89,12 @@ export default function Home() {
         </View>
 
         {/* Repo search results */}
-        {repos.error ? (
+        {sagaError ? (
           content
         ) : (
           <RepoList
             repoData={filteredRepos}
-            isLoading={repos.loading}
+            isLoading={sagaLoading}
             setPage={setPage}
             gitUser={gitUser}
           />

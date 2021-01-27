@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 
 export function useAxiosGet(url) {
-  // create product state variable
+  // create state variable
   const [request, setRequest] = useState({
     loading: false,
     data: [],
