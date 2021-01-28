@@ -6,10 +6,8 @@ const styles = StyleSheet.create({
   //   overflow: "hidden",
   // },
   repoCard: {
-    flex: 1,
     paddingHorizontal: 15,
     paddingVertical: 15,
-    width: "100%",
     height: 130,
     maxHeight: 130,
     borderRadius: 10,

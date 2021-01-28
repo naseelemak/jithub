@@ -15,10 +15,11 @@ function* fetchRepoList(action) {
     const repoList = yield call(getApi, action.payload.url);
     yield put({ type: "SET_REPOLIST_SUCCESS", payload: repoList });
 
-    // update allLoaded flag when there are no more pages to load
+    // updates allLoaded flag when there are no more pages to load
     repoList.length < perPage &&
       (yield put({ type: "SET_REPOLIST_ALL_LOADED" }));
   } catch (error) {
+    // change payload to "error" variable for debugging purposes
     yield put({ type: "SET_REPOLIST_FAILED", payload: true });
   }
 }

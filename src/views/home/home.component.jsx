@@ -31,12 +31,12 @@ export default function Home() {
 
   const url = `https://api.github.com/users/${gitUser}/repos?per_page=${page.perPage}&page=${page.currentPage}`;
 
+  let content = null;
+
   // fetch repoList data from URL
   useEffect(() => {
     dispatch(setRepoList(url, page.perPage));
   }, [url]);
-
-  let content = null;
 
   // set error message if data retrieval fails
   content = error && <Error />;
@@ -53,35 +53,36 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.body}>
-        {/* Search bar section */}
-        <View style={styles.topContainer}>
-          <Text style={styles.gitUsername}>{gitUser}</Text>
-          <View style={styles.searchBar}>
-            <Icon style={styles.searchIcon} name="search" />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter repository keywords"
-              onChangeText={(text) => {
-                handleChange(text);
-              }}
-              value={searchField}
-            />
-          </View>
-        </View>
-
-        {/* Repo search results */}
-        {error ? (
-          content
-        ) : (
-          <RepoList
-            repoData={filteredRepos}
-            isLoading={isLoading}
-            setPage={setPage}
-            gitUser={gitUser}
+      {/* Search bar section */}
+      <View style={styles.topContainer}>
+        <Text style={styles.gitUsername}>{gitUser}</Text>
+        <View style={styles.searchBar}>
+          <Icon style={styles.searchIcon} name="search" />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Enter repository keywords"
+            onChangeText={(text) => {
+              handleChange(text);
+            }}
+            value={searchField}
           />
-        )}
+        </View>
       </View>
+
+      {/* Repo search results */}
+      {error ? (
+        content
+      ) : (
+        <RepoList
+          repoData={filteredRepos}
+          noRepos={
+            // set noRepos to true if user has no repositories
+            repoData.length < 1 ? true : false
+          }
+          isLoading={isLoading}
+          setPage={setPage}
+        />
+      )}
     </View>
   );
 }

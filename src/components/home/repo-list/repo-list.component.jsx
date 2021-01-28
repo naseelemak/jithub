@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View, Text } from "react-native";
 import styles from "./repo-list.styles";
 import { FlatList } from "react-native-gesture-handler";
 
@@ -24,15 +24,23 @@ const handleLoadMore = (setPage) => {
 };
 
 // display loading icon when data form API is still being retrieved
-// ! has error when using isLoading ternary
 const renderFooter = (isLoading) => {
   return isLoading && <Loader />;
 };
 
-const RepoList = ({ repoData, isLoading, setPage }) => {
+// to display when user has no repositories
+const NoRepos = () => (
+  <View style={styles.noRepos}>
+    <Text style={styles.noReposText}>This user has no repositories.</Text>
+  </View>
+);
+
+const RepoList = ({ repoData, noRepos, isLoading, setPage }) => {
   const allLoaded = useSelector((state) => state.repoList.allLoaded);
 
-  return (
+  return noRepos ? (
+    <NoRepos />
+  ) : (
     <View style={styles.flatListContainer}>
       <FlatList
         contentContainerStyle={styles.contentContainer}
