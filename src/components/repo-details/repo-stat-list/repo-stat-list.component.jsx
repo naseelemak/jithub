@@ -3,13 +3,19 @@ import { View } from "react-native";
 import styles from "./repo-stat-list.styles";
 import RepoStat from "../repo-stat/repo-stat.component";
 
-const RepoStatList = ({ repoData }) => {
+// Redux imports
+import { useSelector } from "react-redux";
+
+const RepoStatList = () => {
   const [stats, setStats] = useState([]);
+
+  const repoDetails = useSelector((state) => state.repoDetails.details);
+  // const stats = useSelector((state) => state.repoDetails.details.stats);
 
   // SETS THE STATS
   // ===================================================
   useEffect(() => {
-    const { stargazers_count, forks_count, subscribers_count } = repoData;
+    const { stargazers_count, forks_count, subscribers_count } = repoDetails;
 
     setStats(() => [
       // REPO STARS (stargazers_count)
@@ -34,7 +40,7 @@ const RepoStatList = ({ repoData }) => {
         unit: "watchers",
       },
     ]);
-  }, [repoData]);
+  }, [repoDetails]);
   // ===================================================
 
   return (

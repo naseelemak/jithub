@@ -1,7 +1,7 @@
 const INITIAL_STATE = {
   data: [],
   loading: false,
-  error: null,
+  error: false,
 };
 
 const repoListReducer = (state = INITIAL_STATE, action) => {

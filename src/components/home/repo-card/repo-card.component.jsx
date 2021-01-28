@@ -5,14 +5,13 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./repo-card.styles";
 
 // TO DO: figure out how to load specific repo detail page
-const handlePress = (navigation, repoName, languageFlag) => {
-  navigation.navigate("RepoDetails", {
+const handlePress = (navigation, repoName) => {
+  navigation.navigate("RepoDetailsTest", {
     repoName: repoName,
-    languageFlag: languageFlag,
   });
 };
 
-const RepoCard = ({ name, description, language }) => {
+const RepoCard = ({ name, description }) => {
   const navigation = useNavigation();
 
   return (
@@ -20,7 +19,7 @@ const RepoCard = ({ name, description, language }) => {
       <TouchableOpacity
         style={styles.repoCard}
         onPress={() => {
-          handlePress(navigation, name, language);
+          handlePress(navigation, name);
         }}
       >
         <Text style={styles.repoName} numberOfLines={1} ellipsizeMode="tail">
