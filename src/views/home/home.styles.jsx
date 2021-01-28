@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   gitUsername: {
     textAlign: "center",
     fontSize: 25,
+    color: "#24292e",
     fontFamily: "RobotoBold",
   },
   searchBar: {
