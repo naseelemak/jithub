@@ -10,13 +10,15 @@ const repoDetailsReducer = (state = INITIAL_STATE, action) => {
     case "SET_REPO_DETAILS_REQUESTED":
       return {
         ...state,
+        details: {},
+        languages: [],
         loading: true,
       };
     case "SET_REPO_DETAILS_SUCCESS":
       return {
         ...state,
         details: action.payload,
-        loading: true, // loading is done once languages have been loaded too
+        loading: false,
       };
     case "SET_REPO_DETAILS_FAILED":
       return {

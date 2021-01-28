@@ -10,7 +10,6 @@ import store from "./src/redux/store";
 
 // other component imports //
 import Home from "./src/views/home/home.component";
-import RepoDetailsTest from "./src/views/repo-details-test/repo-details-test.component";
 import RepoDetails from "./src/views/repo-details/repo-details.component";
 import Header from "./src/components/header/header.component";
 import AppLoading from "expo-app-loading";
@@ -54,11 +53,6 @@ function App() {
                 return <Header />;
               },
             }}
-          />
-          <Stack.Screen
-            name="RepoDetailsTest"
-            component={RepoDetailsTest}
-            options={{ title: "Details-Test" }}
           />
           <Stack.Screen
             name="RepoDetails"

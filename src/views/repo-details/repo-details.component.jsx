@@ -1,58 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 import styles from "./repo-details.styles";
-import { useAxiosGet } from "../../hooks/http-request";
 import { Octicons } from "@expo/vector-icons";
 
-// redux imports
-import { useSelector } from "react-redux";
+// Redux imports
+import { useDispatch, useSelector } from "react-redux";
+import { setRepoDetails } from "../../redux/repo-details/repo-details.actions";
 
 // other component imports //
 import Loader from "../../components/loader/loader.component";
+import Error from "../../components/error/error.component";
 import MyButton from "../../components/my-button/my-button.component";
 import RepoLanguageList from "../../components/repo-details/repo-language-list/repo-language-list.component";
 import RepoStatList from "../../components/repo-details/repo-stat-list/repo-stat-list.component";
 
 export default function RepoDetails({ navigation, route }) {
+  const dispatch = useDispatch();
   const gitUser = useSelector((state) => state.gitUser.currentUser);
+  const repoDetails = useSelector((state) => state.repoDetails.details);
+  const isLoading = useSelector((state) => state.repoDetails.loading);
+  const error = useSelector((state) => state.repoDetails.error);
   const repoName = route.params.repoName;
-  const languageFlag = route.params.languageFlag;
 
   const url = `https://api.github.com/repos/${gitUser}/${repoName}`;
 
-  // Get REPO data
-  // ====================================================
-  const repo = useAxiosGet(url);
-  const repoData = repo.data;
-  // ====================================================
-
-  // Get repo LANGUAGE data using the language URL from the previous API request
-  // ====================================================
-  const repoLanguagesUrl = repoData.languages_url;
-  const repoLanguages = useAxiosGet(repoLanguagesUrl);
-  const repoLanguageData = repoLanguages.data;
-  // ====================================================
+  useEffect(() => {
+    dispatch(setRepoDetails(url));
+  }, []);
 
   let content = <Loader />;
 
+  // set loading component if isLoading
+  content = isLoading && <Loader />;
+
   // set error message if data retrieval fails
-  if (repo.error) {
-    content = (
-      <Text style={styles.error}>
-        There was an error.
-        {"\n"}
-        {"\n"}Please relaunch app or try again later.
-      </Text>
-    );
-  }
+  content = error && <Error />;
 
-  // - repoLanguages.error returns true a few times because url is undefined at first. Fix it
-  if (repo.loading || repoLanguages.loading || repoLanguages.error) {
-    content = <Loader />;
-  }
-
-  // find a way...
-  return repo.loading || repoLanguages.loading || repoLanguages.error ? (
+  return isLoading || error ? (
     content
   ) : (
     <View style={styles.repoDetails}>
@@ -65,23 +49,20 @@ export default function RepoDetails({ navigation, route }) {
               {gitUser}
             </Text>
             <Text>{" / "}</Text>
-            <Text style={styles.repoName}>{repoName}</Text>
+            <Text style={styles.repoName}>{repoDetails.name}</Text>
           </View>
-          <Text style={styles.description}>{repoData.description}</Text>
+          <Text style={styles.description}>{repoDetails.description}</Text>
         </View>
 
         <View style={styles.lineSeparator} />
 
         {/* STATS SECTION */}
-        <RepoStatList repoData={repoData} />
+        <RepoStatList />
 
         <View style={styles.lineSeparator} />
 
         {/* LANGUAGES SECTION */}
-        <RepoLanguageList
-          repoLanguageData={repoLanguageData}
-          languageFlag={languageFlag}
-        />
+        <RepoLanguageList />
 
         <View style={styles.lineSeparator} />
       </View>

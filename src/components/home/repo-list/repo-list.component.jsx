@@ -4,6 +4,7 @@ import styles from "./repo-list.styles";
 import { FlatList } from "react-native-gesture-handler";
 
 // other component imports
+import Loader from "../../loader/loader.component";
 import RepoCard from "../repo-card/repo-card.component";
 
 // for flatList renderItem
@@ -13,19 +14,16 @@ const renderItem = (item) => {
 
 // for flatList to load more oneEndReached
 const handleLoadMore = (setPage) => {
-  setPage((prevPage) => prevPage + 1);
+  setPage((prevPage) => ({
+    ...prevPage,
+    currentPage: prevPage.currentPage + 1,
+  }));
 };
 
 // display loading icon when data form API is still being retrieved
-// ! has error when I use isLoading ternary
+// ! has error when using isLoading ternary
 const renderFooter = (isLoading) => {
-  return (
-    isLoading && (
-      <View style={styles.loader}>
-        <ActivityIndicator />
-      </View>
-    )
-  );
+  return isLoading && <Loader />;
 };
 
 const RepoList = ({ repoData, isLoading, setPage }) => {
@@ -42,11 +40,7 @@ const RepoList = ({ repoData, isLoading, setPage }) => {
           handleLoadMore(setPage);
         }}
         onEndReachedThreshold={0.8}
-        ListFooterComponent={
-          <View style={styles.loader}>
-            <ActivityIndicator />
-          </View>
-        }
+        ListFooterComponent={<Loader />}
         showsVerticalScrollIndicator={true}
       />
     </View>

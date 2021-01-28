@@ -17,7 +17,10 @@ import Error from "../../components/error/error.component";
 // 2. Add back to top button if you make search bar disappear on scroll
 
 export default function Home() {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState({
+    perPage: 6,
+    currentPage: 1,
+  });
   const [loadedAll, setLoadedAll] = useState(false);
   const [searchField, setSearchField] = useState("");
 
@@ -27,21 +30,17 @@ export default function Home() {
   const repoData = useSelector((state) => state.repoList.data);
   const gitUser = useSelector((state) => state.gitUser.currentUser);
 
-  const url = `https://api.github.com/users/${gitUser}/repos?per_page=${6}&page=${page}`;
+  const url = `https://api.github.com/users/${gitUser}/repos?per_page=${page.perPage}&page=${page.currentPage}`;
 
+  // fetch repoList data from URL
   useEffect(() => {
     dispatch(setRepoList(url));
   }, [url]);
 
   let content = null;
 
-  // SETS ERROR MESSAGE if data retrieval fails
-  // ===================================================
-  // - Find out if you can add "pull down to refresh"
-  if (error) {
-    content = <Error />;
-  }
-  // ===================================================
+  // set error message if data retrieval fails
+  content = error && <Error />;
 
   // SEARCH BAR FUNCTIONS
   // ===================================================

@@ -4,9 +4,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./repo-card.styles";
 
-// TO DO: figure out how to load specific repo detail page
 const handlePress = (navigation, repoName) => {
-  navigation.navigate("RepoDetailsTest", {
+  navigation.navigate("RepoDetails", {
     repoName: repoName,
   });
 };

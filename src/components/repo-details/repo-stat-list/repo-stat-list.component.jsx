@@ -10,7 +10,6 @@ const RepoStatList = () => {
   const [stats, setStats] = useState([]);
 
   const repoDetails = useSelector((state) => state.repoDetails.details);
-  // const stats = useSelector((state) => state.repoDetails.details.stats);
 
   // SETS THE STATS
   // ===================================================
