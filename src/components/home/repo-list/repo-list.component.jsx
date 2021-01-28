@@ -3,6 +3,9 @@ import { View, ActivityIndicator } from "react-native";
 import styles from "./repo-list.styles";
 import { FlatList } from "react-native-gesture-handler";
 
+// Redux imports
+import { useSelector } from "react-redux";
+
 // other component imports
 import Loader from "../../loader/loader.component";
 import RepoCard from "../repo-card/repo-card.component";
@@ -27,6 +30,8 @@ const renderFooter = (isLoading) => {
 };
 
 const RepoList = ({ repoData, isLoading, setPage }) => {
+  const allLoaded = useSelector((state) => state.repoList.allLoaded);
+
   return (
     <View style={styles.flatListContainer}>
       <FlatList
@@ -37,10 +42,10 @@ const RepoList = ({ repoData, isLoading, setPage }) => {
         }}
         keyExtractor={(item) => item.id.toString()}
         onEndReached={() => {
-          handleLoadMore(setPage);
+          !allLoaded && handleLoadMore(setPage);
         }}
-        onEndReachedThreshold={0.8}
-        ListFooterComponent={<Loader />}
+        onEndReachedThreshold={0.45}
+        ListFooterComponent={renderFooter(isLoading)}
         showsVerticalScrollIndicator={true}
       />
     </View>

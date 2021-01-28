@@ -1,4 +1,7 @@
-export const setRepoList = (url) => ({
+export const setRepoList = (url, perPage) => ({
   type: "SET_REPOLIST_REQUESTED",
-  payload: url,
+  payload: {
+    url: url,
+    perPage: perPage,
+  },
 });

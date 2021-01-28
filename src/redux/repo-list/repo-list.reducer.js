@@ -1,5 +1,6 @@
 const INITIAL_STATE = {
   data: [],
+  allLoaded: false,
   loading: false,
   error: false,
 };
@@ -22,6 +23,12 @@ const repoListReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         error: action.payload,
+      };
+    case "SET_REPOLIST_ALL_LOADED":
+      return {
+        ...state,
+        allLoaded: true,
+        loading: false,
       };
     default:
       return state;

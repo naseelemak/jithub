@@ -21,7 +21,6 @@ export default function Home() {
     perPage: 6,
     currentPage: 1,
   });
-  const [loadedAll, setLoadedAll] = useState(false);
   const [searchField, setSearchField] = useState("");
 
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ export default function Home() {
 
   // fetch repoList data from URL
   useEffect(() => {
-    dispatch(setRepoList(url));
+    dispatch(setRepoList(url, page.perPage));
   }, [url]);
 
   let content = null;

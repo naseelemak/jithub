@@ -1,4 +1,4 @@
-import { call, put, takeEvery, select } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import Axios from "axios";
 
 const getApi = (url) => {
@@ -10,9 +10,14 @@ const getApi = (url) => {
 };
 
 function* fetchRepoList(action) {
+  const perPage = yield action.payload.perPage;
   try {
-    const repoList = yield call(getApi, action.payload);
+    const repoList = yield call(getApi, action.payload.url);
     yield put({ type: "SET_REPOLIST_SUCCESS", payload: repoList });
+
+    // update allLoaded flag when there are no more pages to load
+    repoList.length < perPage &&
+      (yield put({ type: "SET_REPOLIST_ALL_LOADED" }));
   } catch (error) {
     yield put({ type: "SET_REPOLIST_FAILED", payload: true });
   }
