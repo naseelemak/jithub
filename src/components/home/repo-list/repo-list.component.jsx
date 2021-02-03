@@ -7,6 +7,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 
 // other component imports
+import SearchBar from "../search-bar/search-bar.component";
 import Loader from "../../loader/loader.component";
 import RepoCard from "../repo-card/repo-card.component";
 
@@ -21,6 +22,11 @@ const handleLoadMore = (setPage) => {
     ...prevPage,
     currentPage: prevPage.currentPage + 1,
   }));
+};
+
+// search bar that scrolls with the FlatList
+const renderHeader = () => {
+  return <SearchBar placeholder="Enter repository keywords" />;
 };
 
 // display loading icon when data form API is still being retrieved
@@ -53,6 +59,7 @@ const RepoList = ({ repoData, noRepos, isLoading, setPage }) => {
           !allLoaded && handleLoadMore(setPage);
         }}
         onEndReachedThreshold={0.45}
+        // ListHeaderComponent={renderHeader}
         ListFooterComponent={renderFooter(isLoading)}
         showsVerticalScrollIndicator={true}
       />

@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import store from "./src/redux/store";
 
 // other component imports //
+import GitUserSelect from "./src/views/git-user-select/git-user-select.component";
 import Home from "./src/views/home/home.component";
 import RepoDetails from "./src/views/repo-details/repo-details.component";
 import Header from "./src/components/header/header.component";
@@ -30,7 +31,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Home"
+          initialRouteName="GitUserSelect"
           screenOptions={{
             headerShown: true,
             headerStyle: {
@@ -46,6 +47,13 @@ function App() {
           }}
         >
           <Stack.Screen
+            name="GitUserSelect"
+            component={GitUserSelect}
+            options={{
+              title: "User Select",
+            }}
+          />
+          <Stack.Screen
             name="Home"
             component={Home}
             options={{
@@ -57,7 +65,9 @@ function App() {
           <Stack.Screen
             name="RepoDetails"
             component={RepoDetails}
-            options={{ title: "Details" }}
+            options={{
+              title: "Details",
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

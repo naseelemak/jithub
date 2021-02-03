@@ -1,24 +1,26 @@
+import { userList } from "./test-data";
+
 const INITIAL_STATE = {
-  currentUser: "react-native-community",
+  userList: userList,
   loading: false,
   error: false,
 };
 
-const gitUserReducer = (state = INITIAL_STATE, action) => {
+const gitUserListReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "SET_GITUSER_REQUESTED":
+    case "SET_GITUSER_LIST_REQUESTED":
       return {
         ...state,
-        currentUser: "",
+        userList: [],
         loading: true,
       };
-    case "SET_GITUSER_SUCCESS":
+    case "SET_GITUSER_LIST_SUCCESS":
       return {
         ...state,
-        currentUser: action.payload,
+        userList: action.payload,
         loading: false,
       };
-    case "SET_GITUSER_FAILED":
+    case "SET_GITUSER_LIST_FAILED":
       return {
         ...state,
         loading: false,
@@ -29,4 +31,4 @@ const gitUserReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default gitUserReducer;
+export default gitUserListReducer;

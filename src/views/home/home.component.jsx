@@ -60,6 +60,7 @@ export default function Home() {
           <Icon style={styles.searchIcon} name="search" />
           <TextInput
             style={styles.textInput}
+            returnKeyType="search"
             placeholder="Enter repository keywords"
             onChangeText={(text) => {
               handleChange(text);
