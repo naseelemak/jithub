@@ -11,6 +11,7 @@ const getApi = (url) => {
 
 function* fetchRepoList(action) {
   const perPage = yield action.payload.perPage;
+
   try {
     const repoList = yield call(getApi, action.payload.url);
     yield put({ type: "SET_REPOLIST_SUCCESS", payload: repoList });

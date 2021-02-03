@@ -24,7 +24,7 @@ const handleLoadMore = (setPage) => {
   }));
 };
 
-// search bar that scrolls with the FlatList
+// search bar that scrolls with the FlatList (WIP)
 const renderHeader = () => {
   return <SearchBar placeholder="Enter repository keywords" />;
 };
@@ -49,12 +49,12 @@ const RepoList = ({ repoData, noRepos, isLoading, setPage }) => {
   ) : (
     <View style={styles.flatListContainer}>
       <FlatList
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.contentContainer}
         data={repoData}
         renderItem={({ item }) => {
           return renderItem(item);
         }}
-        keyExtractor={(item) => item.id.toString()}
         onEndReached={() => {
           !allLoaded && handleLoadMore(setPage);
         }}

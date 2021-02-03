@@ -10,27 +10,55 @@ import { setGitUser } from "../../redux/gitUser/gituser.actions";
 import { setGitUserList } from "../../redux/gituser-list/gituser-list.actions";
 
 // other component imports //
-import MyButton from "../../components/my-button/my-button.component";
+import Loader from "../../components/loader/loader.component";
 import Error from "../../components/error/error.component";
+import MyButton from "../../components/my-button/my-button.component";
 
 export default function GitUserSelect() {
+  const [page, setPage] = useState({
+    perPage: 25,
+    currentPage: 0,
+  });
   const [searchField, setSearchField] = useState("");
+  const [query, setQuery] = useState("");
 
   const dispatch = useDispatch();
-  const gitUser = useSelector((state) => state.gitUser.currentUser);
   const gitUserList = useSelector((state) => state.gitUserList.userList);
+  const isLoading = useSelector((state) => state.gitUserList.loading);
+  const allLoaded = useSelector((state) => state.gitUserList.allLoaded);
+  const error = useSelector((state) => state.gitUserList.error);
 
-  const keyExtractor = (item, index) => index.toString();
+  let content = null;
 
-  // const query = "nasee";
+  let url = `https://api.github.com/search/users?q=${query}&per_page=${page.perPage}&page=${page.currentPage}`;
 
-  // const url = `https://api.github.com/search/users?q=${query}`;
+  // fetch gitUserList data from URL
+  useEffect(() => {
+    if (query.trim() != "") {
+      dispatch(setGitUserList(url, page.perPage));
+    }
+  }, [page]);
 
-  const getRepos = async () => {
-    dispatch(setGitUserList(url));
+  const getGitUserList = () => {
+    setQuery(searchField);
+    setPage((prevPage) => ({
+      ...prevPage,
+      currentPage: 1,
+    }));
   };
 
-  const handleLoadMore = () => {};
+  // set error message if data retrieval fails
+  content = error && <Error />;
+
+  const handleLoadMore = () => {
+    console.log("Loading more!");
+
+    !allLoaded &&
+      setPage((prevPage) => ({
+        ...prevPage,
+        currentPage: prevPage.currentPage + 1,
+      }));
+  };
 
   const renderItem = ({ item }) => (
     <ListItem style={styles.listItem} bottomDivider>
@@ -43,6 +71,11 @@ export default function GitUserSelect() {
     </ListItem>
   );
 
+  // display loading icon when data form API is still being retrieved
+  const renderFooter = () => {
+    return isLoading && <Loader />;
+  };
+
   const handleChange = (text) => {
     setSearchField(text);
   };
@@ -54,23 +87,30 @@ export default function GitUserSelect() {
         <TextInput
           style={styles.textInput}
           returnKeyType="search"
-          placeholder="Enter repository keywords"
+          autoCapitalize="none"
+          placeholder="Search for any user..."
           onChangeText={(text) => {
             handleChange(text);
           }}
-          onSubmitEditing={getRepos}
+          onSubmitEditing={getGitUserList}
           value={searchField}
         />
       </View>
-      <View style={styles.userListContainer}>
-        <FlatList
-          keyExtractor={keyExtractor}
-          data={gitUserList}
-          renderItem={renderItem}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.45}
-        />
-      </View>
+
+      {error ? (
+        content
+      ) : (
+        <View style={styles.userListContainer}>
+          <FlatList
+            keyExtractor={(item) => item.id.toString()}
+            data={gitUserList}
+            renderItem={renderItem}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.45}
+            ListFooterComponent={renderFooter}
+          />
+        </View>
+      )}
     </View>
   );
 }

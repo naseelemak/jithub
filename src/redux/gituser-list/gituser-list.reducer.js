@@ -1,7 +1,8 @@
 import { userList } from "./test-data";
 
 const INITIAL_STATE = {
-  userList: userList,
+  userList: [],
+  allLoaded: false,
   loading: false,
   error: false,
 };
@@ -11,20 +12,25 @@ const gitUserListReducer = (state = INITIAL_STATE, action) => {
     case "SET_GITUSER_LIST_REQUESTED":
       return {
         ...state,
-        userList: [],
         loading: true,
       };
     case "SET_GITUSER_LIST_SUCCESS":
       return {
         ...state,
-        userList: action.payload,
         loading: false,
+        userList: [...state.userList, ...action.payload],
       };
     case "SET_GITUSER_LIST_FAILED":
       return {
         ...state,
         loading: false,
         error: action.payload,
+      };
+    case "SET_GITUSER_LIST_ALL_LOADED":
+      return {
+        ...state,
+        allLoaded: true,
+        loading: false,
       };
     default:
       return state;

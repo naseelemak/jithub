@@ -24,14 +24,14 @@ export default function Home() {
   const [searchField, setSearchField] = useState("");
 
   const dispatch = useDispatch();
+  const gitUser = useSelector((state) => state.gitUser.currentUser);
+  const repoData = useSelector((state) => state.repoList.data);
   const isLoading = useSelector((state) => state.repoList.loading);
   const error = useSelector((state) => state.repoList.error);
-  const repoData = useSelector((state) => state.repoList.data);
-  const gitUser = useSelector((state) => state.gitUser.currentUser);
-
-  const url = `https://api.github.com/users/${gitUser}/repos?per_page=${page.perPage}&page=${page.currentPage}`;
 
   let content = null;
+
+  const url = `https://api.github.com/users/${gitUser}/repos?per_page=${page.perPage}&page=${page.currentPage}`;
 
   // fetch repoList data from URL
   useEffect(() => {
@@ -61,6 +61,7 @@ export default function Home() {
           <TextInput
             style={styles.textInput}
             returnKeyType="search"
+            autoCapitalize="none"
             placeholder="Enter repository keywords"
             onChangeText={(text) => {
               handleChange(text);
